@@ -1,10 +1,11 @@
 module Web.HTML.Basic  where
 
-import Control.Monad.Reader (Reader, MonadReader, ask, runReader, local)
+import Control.Monad.Reader (Reader, MonadReader, ask, runReader, withReader)
 import Data.ByteString (ByteString, intercalate)
-import Data.Monoid ((<>))
+import Data.Monoid (Monoid(..), (<>))
 import Data.Proxy (Proxy)
 import GHC.TypeLits (KnownSymbol, symbolVal)
+
 
 -- TODO try this out in finally tagless
 data Document =
@@ -12,10 +13,12 @@ data Document =
 
 newtype Head =
     Head {headNodes:: [HeadNode]}
+    deriving newtype (Semigroup, Monoid)
 newtype HeadNode = HeadNode Node
 
 newtype Body =
     Body {bodyNodes:: [BodyNode]}
+    deriving newtype (Semigroup, Monoid)
 newtype BodyNode = BodyNode Node
 
 -- TODO make this type level
@@ -89,12 +92,14 @@ dummyDoc =
             ]
         )
 
--- I can accomplish this using a Reader, since that's just a single-cell HList. May want to check parentage
 data (:.) a b  = a :. b
 data Empty
 
-ls :: Head :. Empty
-ls = undefined :. undefined
+type family Elem needle haystack where
+    Elem needle (needle :. rest) = True
+    Elem needle (a :. Empty) = False
+    Elem needle (a :. rest) = Elem needle rest
+
 
 type GenBuilder a rest = Reader (a :. rest)
 type HeadNodeBuilder = GenBuilder Head Empty
@@ -115,26 +120,29 @@ mkBody ::
     -> Body
 mkBody builders = Body [runReader b (undefined :. undefined) | b <- builders]
 
-type ParaBuilder rest = GenBuilder Para rest
-data Para
-
--- Is this dumb? A little bit
-para ::
-    [(ParaBuilder rest) Node]
-    -> [Attribute]
-    -> BodyBuilder BodyNode
-para contentBuilders attribs =
-    pure . BodyNode $ Node "p" [runReader c (undefined :. undefined) | c <- contentBuilders] attribs
-
-txt ::
+txt :: Elem Body rest ~ True =>
     ByteString
     -> (GenBuilder a rest) Node
 txt = pure . Txt
-
-bold :: ByteString -> (ParaBuilder rest) Node
-bold contents = pure $ Node "b" [Txt contents] []
 
 h2 ::
     ByteString
     -> BodyBuilder BodyNode
 h2 contents = pure . BodyNode $ Node "h2" [Txt contents] []
+
+type ParaBuilder rest = GenBuilder Para rest
+data Para
+
+-- Is this dumb? A little bit
+para :: Elem Body rest ~ True =>
+    [(ParaBuilder rest) Node]
+    -> [Attribute]
+    -> Reader rest BodyNode
+para contentBuilders attribs = do
+    contents <- mapM (withReader (\rest -> undefined :.rest )) contentBuilders
+    pure . BodyNode $ Node "p" contents attribs
+
+bold :: Elem Para rest ~ True =>
+    ByteString
+    -> Reader rest Node
+bold contents = pure $ Node "b" [Txt contents] []
