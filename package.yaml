@@ -28,7 +28,8 @@ dependencies:
 
 library:
   source-dirs: src
-  default-extensions: OverloadedStrings TypeFamilies DataKinds GADTs
+  default-extensions: OverloadedStrings TypeFamilies DataKinds GADTs NamedFieldPuns TypeOperators FlexibleContexts
+    ConstraintKinds
 
 executables:
   pachyderm-exe:
