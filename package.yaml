@@ -29,7 +29,7 @@ dependencies:
 library:
   source-dirs: src
   default-extensions: OverloadedStrings TypeFamilies DataKinds GADTs NamedFieldPuns TypeOperators FlexibleContexts
-    ConstraintKinds MultiParamTypeClasses DerivingStrategies GeneralizedNewtypeDeriving ApplicativeDo
+    ConstraintKinds MultiParamTypeClasses DerivingStrategies GeneralizedNewtypeDeriving ApplicativeDo KindSignatures
 
 executables:
   pachyderm-exe:
