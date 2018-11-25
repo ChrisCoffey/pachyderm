@@ -5,7 +5,7 @@ module Pachyderm.Web.HTML.Render (
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
     TextElems(..), Txt(..), FlowContent(..), Sectioning(..), TextSegment, Head, Body, GenBuilder,
-    HeadNodeBuilder, BodyBuilder)
+    HeadNodeBuilder, BodyBuilder, HRef(..))
 
 import Control.Monad.Reader (Reader, MonadReader, ask, runReader, withReader)
 import Data.ByteString (ByteString, intercalate)
@@ -53,19 +53,29 @@ instance Headings RenderDoc where
 
 instance FlowContent RenderDoc where
     p contents = do
-        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
-        let joined = intercalate "\n\t" (unWrap <$> contents)
+        cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> cxs)
         renderWrap $ "<p>"<>joined<>"</p>"
-    a = undefined
+    a (Href link) contents = do
+        cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> cxs)
+        renderWrap $ "<a href=\""<>link<>"\">"<>joined<>"</a>"
     blockquote = undefined
     div = undefined
-    header = undefined
-    footer = undefined
+    header contents = do
+        cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> cxs)
+        renderWrap $ "<header>"<>joined<>"</header>"
+    footer contents = do
+        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> contents)
+        renderWrap $ "<footer>"<>joined<>"</footer>"
     hr = undefined
+    pre = undefined
 
 instance TextElems RenderDoc where
     i = undefined
-    em = undefined
+    em content = renderWrap $ "<em>"<>content<>"</em>"
     strong = undefined
     small = undefined
     struck = undefined
@@ -75,6 +85,21 @@ instance TextElems RenderDoc where
     time = undefined
     break = undefined
     optionalBreak = undefined
+
+instance Sectioning RenderDoc where
+    article contents = do
+        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> contents)
+        renderWrap $ "<article>"<>joined<>"</article>"
+    aside contents = do
+        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> contents)
+        renderWrap $ "<aside>"<>joined<>"</aside>"
+    nav contents = do
+        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
+        let joined = intercalate "\n\t" (unWrap <$> contents)
+        renderWrap $ "<nav>"<>joined<>"</nav>"
+
 
 render ::
     RenderDoc a

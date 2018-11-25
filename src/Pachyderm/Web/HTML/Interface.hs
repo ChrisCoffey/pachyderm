@@ -7,6 +7,10 @@ module Pachyderm.Web.HTML.Interface (
     FlowContent(..),
     Sectioning(..),
 
+    -- | Newtypes
+    HRef(..),
+    LinkType(..),
+
     -- | Uninhabited markers
     TextSegment,
     Head,
@@ -97,7 +101,7 @@ type family AcceptsFlow xs where
 data Header
 data Footer
 class FlowContent repr where
-    a :: (AcceptsFlow rest ~ True) => [Reader (TextSegment :. rest) (repr a)] -> Reader rest (repr a)
+    a :: (AcceptsFlow rest ~ True) => HRef -> [Reader (TextSegment :. rest) (repr a)] -> Reader rest (repr a)
     p :: (AcceptsFlow rest ~ True) => [Reader (TextSegment :. rest) ( repr a )]  -> Reader rest (repr a)
     blockquote :: (AcceptsFlow rest ~ True) => [Reader rest ( repr a )]  -> Reader rest (repr a)
     div :: (AcceptsFlow rest ~ True) => [Reader rest ( repr a )]  -> Reader rest (repr a)
