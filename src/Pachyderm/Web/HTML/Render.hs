@@ -4,7 +4,7 @@ module Pachyderm.Web.HTML.Render (
 
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
-    TextElems(..), Txt(..), Paragraph(..), TextSegment, Head, Body, GenBuilder,
+    TextElems(..), Txt(..), FlowContent(..), Sectioning(..), TextSegment, Head, Body, GenBuilder,
     HeadNodeBuilder, BodyBuilder)
 
 import Control.Monad.Reader (Reader, MonadReader, ask, runReader, withReader)
@@ -42,6 +42,7 @@ instance Txt RenderDoc where
 instance HeadNode RenderDoc where
     title content = renderWrap $ "<title>" <> content <> "</title>"
     charset content = renderWrap $ "<meta charset=\""<>content<>"\"></meta>"
+    link = undefined
 
 instance Headings RenderDoc where
     h1 content = renderWrap $ "<h1>"<>content<>"</h1>"
@@ -50,13 +51,20 @@ instance Headings RenderDoc where
     h4 content = renderWrap $ "<h4>"<>content<>"</h4>"
     h5 content = renderWrap $ "<h5>"<>content<>"</h5>"
 
-instance Paragraph RenderDoc where
+instance FlowContent RenderDoc where
     p contents = do
         contents <- mapM (withReader (\rest -> undefined :.rest )) contents
         let joined = intercalate "\n\t" (unWrap <$> contents)
         renderWrap $ "<p>"<>joined<>"</p>"
+    a = undefined
+    blockquote = undefined
+    div = undefined
+    header = undefined
+    footer = undefined
+    hr = undefined
 
 instance TextElems RenderDoc where
+    i = undefined
     em = undefined
     strong = undefined
     small = undefined

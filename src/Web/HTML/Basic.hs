@@ -2,12 +2,12 @@ module Web.HTML.Basic  where
 
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
-    TextElems(..), Txt(..), Paragraph(..), TextSegment, Head, Body, GenBuilder,
+    TextElems(..), Txt(..), FlowContent(..), TextSegment, Head, Body, GenBuilder,
     HeadNodeBuilder, BodyBuilder)
 
 
 dummyDoc' :: (HtmlDoc repr, HeadNode repr, Headings repr,
-    TextElems repr, Paragraph repr, Txt repr) =>
+    TextElems repr, FlowContent repr, Txt repr) =>
     repr a
 dummyDoc' =
     hDoc heading body

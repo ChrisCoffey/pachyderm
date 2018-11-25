@@ -4,7 +4,7 @@ module Pachyderm.Web.HTML.WordCount (
 
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
-    TextElems(..), Txt(..), Paragraph(..), TextSegment, Head, Body, GenBuilder,
+    TextElems(..), Txt(..), FlowContent(..), Sectioning(..),TextSegment, Head, Body, GenBuilder,
     HeadNodeBuilder, BodyBuilder)
 
 import qualified Data.ByteString as BS
@@ -36,8 +36,9 @@ instance Txt WCDoc where
     txt = wcWrap . wc
 
 instance HeadNode WCDoc where
-    title content = wcWrap 0
-    charset content = wcWrap 0
+    title _ = wcWrap 0
+    charset _ = wcWrap 0
+    link _ _ = wcWrap 0
 
 instance Headings WCDoc where
     h1 = wcWrap . wc
@@ -46,13 +47,20 @@ instance Headings WCDoc where
     h4 = wcWrap . wc
     h5 = wcWrap . wc
 
-instance Paragraph WCDoc where
+instance FlowContent WCDoc where
     p contents = do
         contents <- mapM (withReader (\rest -> undefined :.rest )) contents
         let joined = sum (unWrap <$> contents)
         wcWrap joined
+    a = undefined
+    blockquote = undefined
+    div = undefined
+    header = undefined
+    footer = undefined
+    hr = undefined
 
 instance TextElems WCDoc where
+    i = undefined
     em = undefined
     strong = undefined
     small = undefined
