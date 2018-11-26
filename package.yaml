@@ -26,16 +26,28 @@ dependencies:
 - mtl
 - transformers
 
-library:
-  source-dirs: src
-  default-extensions: OverloadedStrings TypeFamilies DataKinds GADTs NamedFieldPuns TypeOperators FlexibleContexts
+default-extensions: OverloadedStrings TypeFamilies DataKinds GADTs NamedFieldPuns TypeOperators FlexibleContexts
     ConstraintKinds MultiParamTypeClasses DerivingStrategies GeneralizedNewtypeDeriving ApplicativeDo KindSignatures
     UndecidableInstances
+
+library:
+  source-dirs: src
 
 executables:
   pachyderm-exe:
     main:                Main.hs
     source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - pachyderm
+
+executables:
+  foldl:
+    main:                Main.hs
+    source-dirs:         foldl
     ghc-options:
     - -threaded
     - -rtsopts

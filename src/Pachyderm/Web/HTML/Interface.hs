@@ -6,6 +6,7 @@ module Pachyderm.Web.HTML.Interface (
     Txt(..),
     FlowContent(..),
     Sectioning(..),
+    Lists(..),
 
     -- | Newtypes
     HRef(..),
@@ -17,6 +18,7 @@ module Pachyderm.Web.HTML.Interface (
     Body,
     Header,
     Footer,
+    List,
 
     -- | Builder helpers
     GenBuilder,
@@ -109,3 +111,10 @@ class FlowContent repr where
     footer :: (AcceptsFlow rest ~ True) => [Reader (Footer :. rest) ( repr a )]  -> Reader rest (repr a)
     hr :: (AcceptsFlow rest ~ True) => Reader rest (repr a)
     pre :: (AcceptsFlow rest ~ True) => [Reader (TextSegment :. rest) ( repr a )]  -> Reader rest (repr a)
+
+
+data List
+class Lists repr where
+    ul :: ( AcceptsFlow rest ~ True ) => [Reader (List :. rest) ( repr a )] -> Reader rest (repr a)
+    ol :: ( AcceptsFlow rest ~ True ) => [Reader (List :. rest) ( repr a )] -> Reader rest (repr a)
+    li :: (AcceptsFlow rest ~ True) => [Reader (List :. rest) ( repr a )] -> Reader (List :. rest) (repr a)
