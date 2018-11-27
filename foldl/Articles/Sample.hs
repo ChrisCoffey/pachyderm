@@ -1,0 +1,23 @@
+module Articles.Sample (
+    samplePost
+) where
+
+import Pachyderm.Web.HTML.Interface
+
+samplePost :: (Headings repr, Sectioning repr, Txt repr, TextElems repr, FlowContent repr, Lists repr) =>
+    BodyBuilder (repr a)
+samplePost = article [
+    h2 "A Sample Article",
+    p [txt "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi egestas, felis ac congue bibendum, nisi libero consectetur justo, fringilla egestas metus libero in urna. Integer commodo massa a sodales consectetur. Proin vel vehicula leo. Etiam vulputate sapien vel mi accumsan blandit. Praesent sagittis a est a volutpat. Donec ornare nulla orci, sed pretium tellus commodo ac. Proin quam felis, ullamcorper vitae justo ac, malesuada pulvinar mi. Phasellus accumsan felis eget risus posuere, in congue neque placerat. Donec nec nunc pharetra velit commodo elementum id id ipsum. Quisque eu nunc elit. Proin nec tempor libero. Mauris quis justo fringilla, viverra ante vitae, ullamcorper nibh. Quisque auctor imperdiet risus, non convallis dolor fermentum ut. Aliquam semper eros et mi efficitur, ut facilisis turpis dapibus."],
+    p [txt "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi egestas, felis ac congue bibendum, nisi libero consectetur justo, fringilla egestas metus libero in urna. Integer commodo massa a sodales consectetur. Proin vel vehicula leo. Etiam vulputate sapien vel mi accumsan blandit. Praesent sagittis a est a volutpat. Donec ornare nulla orci, sed pretium tellus commodo ac. Proin quam felis, ullamcorper vitae justo ac, malesuada pulvinar mi. Phasellus accumsan felis eget risus posuere, in congue neque placerat. Donec nec nunc pharetra velit commodo elementum id id ipsum. Quisque eu nunc elit. Proin nec tempor libero. Mauris quis justo fringilla, viverra ante vitae, ullamcorper nibh. Quisque auctor imperdiet risus, non convallis dolor fermentum ut. Aliquam semper eros et mi efficitur, ut facilisis turpis dapibus. "],
+    p [txt "Maecenas pellentesque, urna id ultricies malesuada, nulla arcu posuere odio, a bibendum nunc magna in libero. Integer molestie ipsum ac mauris consequat, nec congue nisl viverra. Aenean id sapien varius sem placerat gravida a ac leo. Praesent aliquet metus eget magna posuere tincidunt. Aenean finibus porta libero, sed rhoncus lacus tincidunt eget. Aliquam faucibus accumsan turpis et congue. Morbi congue elit nec pulvinar consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras facilisis velit non orci laoreet sollicitudin. Etiam commodo nulla eu odio faucibus, vitae eleifend mauris rutrum. Aenean quam justo, laoreet malesuada tempus quis, fringilla iaculis eros. Nullam vestibulum dignissim purus, ut imperdiet magna volutpat et. Pellentesque a efficitur metus."],
+    p [code "var f = (a) => {a + 42}"],
+    p [txt "Maecenas pellentesque, urna id ultricies malesuada, nulla arcu posuere odio, a bibendum nunc magna in libero. Integer molestie ipsum ac mauris consequat, nec congue nisl viverra. Aenean id sapien varius sem placerat gravida a ac leo. Praesent aliquet metus eget magna posuere tincidunt. Aenean finibus porta libero, sed rhoncus lacus tincidunt eget. Aliquam faucibus accumsan turpis et congue. Morbi congue elit nec pulvinar consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras facilisis velit non orci laoreet sollicitudin. Etiam commodo nulla eu odio faucibus, vitae eleifend mauris rutrum. Aenean quam justo, laoreet malesuada tempus quis, fringilla iaculis eros. Nullam vestibulum dignissim purus, ut imperdiet magna volutpat et. Pellentesque a efficitur metus."],
+    p [txt "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi egestas, felis ac congue bibendum, nisi libero consectetur justo, fringilla egestas metus libero in urna. Integer commodo massa a sodales consectetur. Proin vel vehicula leo. Etiam vulputate sapien vel mi accumsan blandit. Praesent sagittis a est a volutpat. Donec ornare nulla orci, sed pretium tellus commodo ac. Proin quam felis, ullamcorper vitae justo ac, malesuada pulvinar mi. Phasellus accumsan felis eget risus posuere, in congue neque placerat. Donec nec nunc pharetra velit commodo elementum id id ipsum. Quisque eu nunc elit. Proin nec tempor libero. Mauris quis justo fringilla, viverra ante vitae, ullamcorper nibh. Quisque auctor imperdiet risus, non convallis dolor fermentum ut. Aliquam semper eros et mi efficitur, ut facilisis turpis dapibus. "],
+    ol [
+        li [txt "foo"],
+        -- TODO change constraints on em & i
+        li [p [em "bar"]],
+        li [p [i "baz"]]
+        ]
+    ]
