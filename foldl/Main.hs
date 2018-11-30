@@ -24,8 +24,9 @@ corePages = [
     home
     , about
 --    contact,
- --   articlesIndex
+    , articlesIndex
     ]
+
 
 data RenderedPage = CP {
     cpLocation :: BS.ByteString,
@@ -41,6 +42,8 @@ contentPages = toContent <$> articles
                 cpContent = render $ blogLayout content
             }
 home :: RenderedPage
-home = CP "home.html" $ render (blogLayout homePage)
+home = CP "index.html" $ render (blogLayout homePage)
 about :: RenderedPage
 about = CP "about.html" $ render (blogLayout aboutPage)
+articlesIndex :: RenderedPage
+articlesIndex = CP "articles.html" . render . blogLayout $ articleLinks articles

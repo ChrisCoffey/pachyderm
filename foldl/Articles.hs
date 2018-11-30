@@ -17,7 +17,7 @@ articleLinks :: (FlowContent repr, Lists repr, Txt repr, TextElems repr) =>
 articleLinks =  div . fmap toArticleLink
     where
         toArticleLink article = p [
-                a (HRef $ "articles/" <> name article) [txt $ linkTitle article],
+                a (HRef $ "/articles/" <> name article) [txt $ linkTitle article],
                 i $ "published on: "<> publishDate article
             ]
 

@@ -20,10 +20,10 @@ blogLayout content =
         body = hBody [
             header [
                 nav [
-                   a (HRef "/") [em "Home"],
-                   a (HRef "/articles") [em "Articles"],
-                   a (HRef "/about") [em "About"],
-                   a (HRef "/contact") [em "Contact"]
+                   a (HRef "/index.html") [em "Home"],
+                   a (HRef "/articles.html") [em "Articles"],
+                   a (HRef "/about.html") [em "About"],
+                   a (HRef "/contact.html") [em "Contact"]
                 ]
             ],
             content,
