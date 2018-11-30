@@ -54,6 +54,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - pachyderm
+    - directory
 
 tests:
   pachyderm-test:

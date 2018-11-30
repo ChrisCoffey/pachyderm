@@ -9,7 +9,8 @@ import Control.Monad.Reader (Reader)
 import Data.ByteString (ByteString)
 
 blogLayout :: (HtmlDoc repr, HeadNode repr, Headings repr,
-    TextElems repr, FlowContent repr, Txt repr, Sectioning repr) =>
+    TextElems repr, FlowContent repr, Txt repr, Sectioning repr,
+    Lists repr) =>
     BodyBuilder (repr a)
     -> repr a
 blogLayout content =
@@ -19,10 +20,10 @@ blogLayout content =
         body = hBody [
             header [
                 nav [
-                   a (Href "/") [em "Home"],
-                   a (Href "/articles") [em "Articles"],
-                   a (Href "/about") [em "About"],
-                   a (Href "/contact") [em "Contact"]
+                   a (HRef "/") [em "Home"],
+                   a (HRef "/articles") [em "Articles"],
+                   a (HRef "/about") [em "About"],
+                   a (HRef "/contact") [em "Contact"]
                 ]
             ],
             content,

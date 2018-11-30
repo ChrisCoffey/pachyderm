@@ -16,10 +16,10 @@ dummyDoc' =
         body = hBody [
             header [
                 nav [
-                   a (Href "#") [em "Home"],
-                   a (Href "#") [em "Articles"],
-                   a (Href "#") [em "About"],
-                   a (Href "#") [em "Contact"]
+                   a (HRef "#") [em "Home"],
+                   a (HRef "#") [em "Articles"],
+                   a (HRef "#") [em "About"],
+                   a (HRef "#") [em "Contact"]
                 ]
             ],
             article [

@@ -44,7 +44,7 @@ class HtmlDoc (repr :: * -> *) where
 data Head
 data Body
 
-newtype HRef = Href ByteString
+newtype HRef = HRef ByteString
 newtype LinkType = LinkType ByteString
 
 class HeadNode (repr :: * -> *) where

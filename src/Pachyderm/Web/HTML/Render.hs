@@ -5,7 +5,7 @@ module Pachyderm.Web.HTML.Render (
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
     TextElems(..), Txt(..), FlowContent(..), Sectioning(..), TextSegment, Head, Body, GenBuilder,
-    HeadNodeBuilder, BodyBuilder, HRef(..))
+    HeadNodeBuilder, BodyBuilder, HRef(..), Lists(..))
 
 import Control.Monad.Reader (Reader, MonadReader, ask, runReader, withReader)
 import Data.ByteString (ByteString, intercalate)
@@ -56,7 +56,7 @@ instance FlowContent RenderDoc where
         cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
         let joined = intercalate "\n\t" (unWrap <$> cxs)
         renderWrap $ "<p>"<>joined<>"</p>"
-    a (Href link) contents = do
+    a (HRef link) contents = do
         cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
         let joined = intercalate "\n\t" (unWrap <$> cxs)
         renderWrap $ "<a href=\""<>link<>"\">"<>joined<>"</a>"
@@ -100,6 +100,10 @@ instance Sectioning RenderDoc where
         let joined = intercalate "\n\t" (unWrap <$> contents)
         renderWrap $ "<nav>"<>joined<>"</nav>"
 
+instance Lists RenderDoc where
+    ul = undefined
+    ol = undefined
+    li = undefined
 
 render ::
     RenderDoc a
