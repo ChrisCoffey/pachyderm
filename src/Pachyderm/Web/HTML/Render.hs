@@ -5,7 +5,7 @@ module Pachyderm.Web.HTML.Render (
 import Pachyderm.HList (Empty, (:.)(..), Elem(..))
 import Pachyderm.Web.HTML.Interface (HtmlDoc(..), HeadNode(..), Headings(..),
     TextElems(..), Txt(..), FlowContent(..), Sectioning(..), TextSegment, Head, Body, GenBuilder,
-    HeadNodeBuilder, BodyBuilder, HRef(..), Lists(..))
+    HeadNodeBuilder, BodyBuilder, HRef(..), Lists(..), LinkType(..))
 
 import Control.Monad.Reader (Reader, MonadReader, ask, runReader, withReader)
 import Data.ByteString (ByteString, intercalate)
@@ -42,7 +42,8 @@ instance Txt RenderDoc where
 instance HeadNode RenderDoc where
     title content = renderWrap $ "<title>" <> content <> "</title>"
     charset content = renderWrap $ "<meta charset=\""<>content<>"\"></meta>"
-    link = undefined
+    link (HRef path) (LinkType tpe) =
+        renderWrap $ "<link type=\""<>tpe<>"\" href=\""<>path<>"\">"
 
 instance Headings RenderDoc where
     h1 content = renderWrap $ "<h1>"<>content<>"</h1>"
@@ -51,33 +52,35 @@ instance Headings RenderDoc where
     h4 content = renderWrap $ "<h4>"<>content<>"</h4>"
     h5 content = renderWrap $ "<h5>"<>content<>"</h5>"
 
+renderInExtendedContext node extension contents = do
+    cxs <- mapM (withReader (\rest -> extension :.rest )) contents
+    let joined = intercalate "\n\t" (unWrap <$> cxs)
+    renderWrap $ "<p>"<>joined<>"</p>"
+
+renderInSameContext node cxs = do
+    contents <- sequence cxs
+    let joined = intercalate "\n\t" (unWrap <$> contents)
+    renderWrap $ "<"<>node<>">"<>joined<>"</"<>node<>">"
+
+
 instance FlowContent RenderDoc where
-    p contents = do
-        cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
-        let joined = intercalate "\n\t" (unWrap <$> cxs)
-        renderWrap $ "<p>"<>joined<>"</p>"
+    p = renderInExtendedContext "p" undefined
     a (HRef link) contents = do
         cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
         let joined = intercalate "\n\t" (unWrap <$> cxs)
         renderWrap $ "<a href=\""<>link<>"\">"<>joined<>"</a>"
-    blockquote = undefined
-    div = undefined
-    header contents = do
-        cxs <- mapM (withReader (\rest -> undefined :.rest )) contents
-        let joined = intercalate "\n\t" (unWrap <$> cxs)
-        renderWrap $ "<header>"<>joined<>"</header>"
-    footer contents = do
-        contents <- mapM (withReader (\rest -> undefined :.rest )) contents
-        let joined = intercalate "\n\t" (unWrap <$> contents)
-        renderWrap $ "<footer>"<>joined<>"</footer>"
-    hr = undefined
-    pre = undefined
+    blockquote = renderInSameContext "blockquote"
+    div = renderInSameContext "div"
+    header = renderInExtendedContext "header" undefined
+    footer = renderInExtendedContext "header" undefined
+    hr = renderWrap "</hr>"
+    pre = renderInExtendedContext "pre" undefined
 
 instance TextElems RenderDoc where
-    i = undefined
+    i content = renderWrap $ "<i>"<>content<>"</i>"
     em content = renderWrap $ "<em>"<>content<>"</em>"
-    strong = undefined
-    small = undefined
+    strong content = renderWrap $ "<strong>"<>content<>"</strong>"
+    small content = renderWrap $ "<small>"<>content<>"</small>"
     struck = undefined
     quoted = undefined
     code contents = renderWrap $ "<code>"<>contents<>"</code>"
@@ -101,9 +104,10 @@ instance Sectioning RenderDoc where
         renderWrap $ "<nav>"<>joined<>"</nav>"
 
 instance Lists RenderDoc where
-    ul = undefined
-    ol = undefined
-    li = undefined
+    ul = renderInExtendedContext "ul" undefined
+    --TODO factor all of this copy+paste out
+    ol = renderInExtendedContext "ol" undefined
+    li = renderInSameContext "li"
 
 render ::
     RenderDoc a

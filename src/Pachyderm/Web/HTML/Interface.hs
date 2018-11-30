@@ -117,4 +117,4 @@ data List
 class Lists repr where
     ul :: ( AcceptsFlow rest ~ True ) => [Reader (List :. rest) ( repr a )] -> Reader rest (repr a)
     ol :: ( AcceptsFlow rest ~ True ) => [Reader (List :. rest) ( repr a )] -> Reader rest (repr a)
-    li :: (AcceptsFlow rest ~ True) => [Reader (List :. rest) ( repr a )] -> Reader (List :. rest) (repr a)
+    li :: (AcceptsFlow rest ~ True, Known List rest) => [Reader rest ( repr a )] -> Reader rest (repr a)
